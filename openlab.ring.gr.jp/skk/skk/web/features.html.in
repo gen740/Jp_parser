@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>SKK Openlab - SKK Features</title>
+  <link href="common.css" rel="stylesheet" type="text/css">
+  <link href="index.html" rel="index">
+  <link rev="MADE" href="mailto:skk@ring.gr.jp">
+</head>
+<body>
+<div id="globalnav">
+  <ul>
+    <li><a href="index.html">Top</a>
+    <li><a href="dic.html">SKK dictionaries</a> (<a href="dic" title="DownloadDic">Download</a>)
+    <li><a href="ddskk.html">DDSKK</a> (<a href="maintrunk" title="DownloadSKK">Download</a>)
+    <li><a href="doc.html">Documents</a>
+    <li><a href="ml.html">Mailing list</a>
+    <li><a href="dev.html">Development</a>
+    <li><a href="links.html">Links</a>
+  </ul>
+</div>
+<h1>SKK Features</h1>
+
+<div id="langswitch"><a href="features-ja.html">Japanese</a></div>
+
+<dl>
+  <dt><em>Kana input method variations</em></dt>
+    <dd>Basically, SKK assumes QWERTY keyboards and converts Japanese Roman to Japanese Kana, but is flexible enough to take advantage of other Kana input rules.
+      <ul>
+	<li><a href="http://plone.crew.sfc.keio.ac.jp/groups/tut-code/">TUT-code</a></li>
+	<li><a href="http://openlab.jp/tcode/index.html">T-Code</a></li>
+	<li> Old JIS layout (106 keyboard) Kana input</li>
+	<li><a href="http://nicola.sunicom.co.jp/">NICOLA (NIhongo nyuryoku COnsortium LAyout)</a> Kana input, widely known as the thumb shift method</li>
+      </ul></dd>
+
+  <dt><em>Absence of syntax analysis</em></dt>
+    <dd>Basically, SKK converts words one by one (single-word conversion), <strong>without analysing syntax or grammer</strong>.  Instead, users specify the border between Kanjis and Kanas.  This means you can write dialects, written or spoken words, ancient words as well as standard words in the same manner.</dd>
+
+  <dt><em>More comfortable Kanji input as private dictionary grows</em></dt>
+    <dd>SKK first searches a candidate in the private dictionary.  It is updated every time you select a word.  This means those words you often use will appear earlier.</dd>
+
+  <dt><em>User-friendly way of word learning</em></dt>
+    <dd>Good interface for learning new words.  <strong>It is called automatically</strong> when you skip the last candidate.  You <strong>don't have to specify parts of speech for new words</strong>.</dd>
+
+  <dt><em>Help for novice users</em></dt>
+    <dd>Type C-u M-x skk-tutorial and select `English'.  You can easily get familiar with SKK. </dd>
+
+  <dt><em>Independence upon external programs</em></dt>
+    <dd>SKK is all written in Emacs Lisp.  Unlike Wnn or Canna, you can use SKK even without a server (it is optional).</dd>
+
+  <dt><em>Kanji incremental search</em></dt>
+    <dd>Good interface for incremental search in Japanese.  You can <strong>input Japanese words just like ASCII words even in isearch</strong>.</dd>
+
+  <dt><em>Utilizing Emacs Lisp</em></dt>
+    <dd>SKK converts some keywords not only to Japanese Kanji, but to almost anything you like, including:
+      <ul>
+	<li>current date</li>
+	<li>current time</li>
+	<li>numbers with units</li>
+    </ul></dd>
+
+  <dt><em>Useful optional programs</em></dt>
+    <dd>
+      <ul>
+	<li>context-skk analyses source codes and helps programmers input Kanjis there.</li>
+	<li>skk-comp and skk-dcomp do dabbrev-like completions.</li>
+	<li>skk-look is for conversion using UNIX look command.</li>
+	<li>skk-lookup is for conversion using <a href="http://openlab.jp/edict/lookup/">Lookup</a>, an interface for electronic dictionaries.</li>
+      </ul></dd>
+
+  <dt><em>Compatibility with Emacs</em></dt>
+    <dd>SKK is a minor mode.  It is designed <strong>not to do any harm to major modes</strong>.</dd>
+</dl>
+
+<div id="mailto">mailto: <a href="mailto:skk@ring.gr.jp">skk@ring.gr.jp</a></div>
+<div id="modtime">Last Modified: $Date: 2015/01/04 03:11:23 $</div>
+</body>
+</html>

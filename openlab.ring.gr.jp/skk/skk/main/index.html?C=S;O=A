@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+ <head>
+  <title>Index of /skk/skk/main</title>
+ </head>
+ <body>
+<h1>Index of /skk/skk/main</h1>
+<pre><img src="/icons/blank.png" alt="Icon "> <a href="?C=N;O=A">Name</a>                    <a href="?C=M;O=A">Last modified</a>      <a href="?C=S;O=D">Size</a>  <a href="?C=D;O=A">Description</a><hr><img src="/icons/back.png" alt="[DIR]"> <a href="/skk/skk/">Parent Directory</a>                             -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="READMEs/">READMEs/</a>                08-Feb-2016 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="bayesian/">bayesian/</a>               08-Feb-2016 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="dic/">dic/</a>                    08-Feb-2016 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="doc/">doc/</a>                    08-Feb-2016 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="etc/">etc/</a>                    08-Feb-2016 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="experimental/">experimental/</a>           05-Jul-2021 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="nicola/">nicola/</a>                 08-Feb-2016 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="patches/">patches/</a>                08-Feb-2016 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="test/">test/</a>                   08-Feb-2016 06:00    -   
+<img src="/icons/folder.png" alt="[DIR]"> <a href="tut-code/">tut-code/</a>               08-Feb-2016 06:00    -   
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ddskk-pkg.el">ddskk-pkg.el</a>            07-Feb-2016 14:52  387   
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk.ex">skk.ex</a>                  08-Feb-2016 06:00  1.3K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="leim-list.el.in">leim-list.el.in</a>         08-Feb-2016 06:00  1.5K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-jisx0213.el">skk-jisx0213.el</a>         08-Feb-2016 06:00  1.9K  
+<img src="/icons/text.png" alt="[TXT]"> <a href="README.md">README.md</a>               07-Feb-2016 14:52  2.0K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-setup.el.in">skk-setup.el.in</a>         08-Feb-2016 06:00  2.0K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="make1.bat">make1.bat</a>               08-Feb-2016 06:00  2.2K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-leim.el">skk-leim.el</a>             08-Feb-2016 06:00  2.3K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-version.el">skk-version.el</a>          08-Feb-2016 06:00  2.4K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-cdb.el">skk-cdb.el</a>              08-Feb-2016 06:00  2.5K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="Makefile">Makefile</a>                08-Feb-2016 06:00  2.7K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-abbrev.el">skk-abbrev.el</a>           08-Feb-2016 06:00  3.6K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-cursor.el">skk-cursor.el</a>           08-Feb-2016 06:00  4.0K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-auto.el">skk-auto.el</a>             08-Feb-2016 06:00  4.9K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-develop.el">skk-develop.el</a>          08-Feb-2016 06:00  4.9K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="SKK-CFG">SKK-CFG</a>                 08-Feb-2016 06:00  5.6K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-show-mode.el">skk-show-mode.el</a>        08-Feb-2016 06:00  6.5K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-inline.el">skk-inline.el</a>           08-Feb-2016 06:00  7.0K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-server-completion.el">skk-server-completio..&gt;</a> 08-Feb-2016 06:00  7.1K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="makeit.bat">makeit.bat</a>              08-Feb-2016 06:00  7.6K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-hint.el">skk-hint.el</a>             08-Feb-2016 06:00  7.7K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-jisyo-edit-mode.el">skk-jisyo-edit-mode.el</a>  08-Feb-2016 06:00  7.7K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-sticky.el">skk-sticky.el</a>           08-Feb-2016 06:00  8.3K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="cdb.el">cdb.el</a>                  08-Feb-2016 06:00  9.4K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="install.el">install.el</a>              08-Feb-2016 06:00  9.5K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ChangeLog">ChangeLog</a>               08-Feb-2016 06:00   10K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-kakasi.el">skk-kakasi.el</a>           08-Feb-2016 06:00   11K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-server.el">skk-server.el</a>           08-Feb-2016 06:00   11K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-cus.el">skk-cus.el</a>              08-Feb-2016 06:00   11K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ccc.el">ccc.el</a>                  08-Feb-2016 06:00   11K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-viper.el">skk-viper.el</a>            08-Feb-2016 06:00   12K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-look.el">skk-look.el</a>             08-Feb-2016 06:00   12K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="context-skk.el">context-skk.el</a>          08-Feb-2016 06:00   13K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="install-info.el">install-info.el</a>         08-Feb-2016 06:00   14K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-jisx0201.el">skk-jisx0201.el</a>         08-Feb-2016 06:00   17K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-xemacs.el">skk-xemacs.el</a>           08-Feb-2016 06:00   17K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-study.el">skk-study.el</a>            08-Feb-2016 06:00   18K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-lookup.el">skk-lookup.el</a>           08-Feb-2016 06:00   18K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-num.el">skk-num.el</a>              08-Feb-2016 06:00   19K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-gadget.el">skk-gadget.el</a>           08-Feb-2016 06:00   20K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-comp.el">skk-comp.el</a>             08-Feb-2016 06:00   21K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-dcomp.el">skk-dcomp.el</a>            08-Feb-2016 06:00   24K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-kcode.el">skk-kcode.el</a>            08-Feb-2016 06:00   25K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-emacs.el">skk-emacs.el</a>            08-Feb-2016 06:00   27K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-azik.el">skk-azik.el</a>             08-Feb-2016 06:00   27K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-isearch.el">skk-isearch.el</a>          08-Feb-2016 06:00   30K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ChangeLog.2">ChangeLog.2</a>             08-Feb-2016 06:00   32K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ChangeLog.5">ChangeLog.5</a>             08-Feb-2016 06:00   33K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="SKK-MK">SKK-MK</a>                  08-Feb-2016 06:00   34K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ptexinfmt.el">ptexinfmt.el</a>            08-Feb-2016 06:00   35K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-act.el">skk-act.el</a>              08-Feb-2016 06:00   38K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-macs.el">skk-macs.el</a>             08-Feb-2016 06:00   39K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ChangeLog.1">ChangeLog.1</a>             08-Feb-2016 06:00   41K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-tut.el">skk-tut.el</a>              08-Feb-2016 06:00   45K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-annotation.el">skk-annotation.el</a>       08-Feb-2016 06:00   65K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ChangeLog.0">ChangeLog.0</a>             08-Feb-2016 06:00   85K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ChangeLog.2.daredevil">ChangeLog.2.daredevil</a>   08-Feb-2016 06:00   98K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="vip.el">vip.el</a>                  08-Feb-2016 06:00  104K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ChangeLog.4">ChangeLog.4</a>             08-Feb-2016 06:00  140K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-tankan.el">skk-tankan.el</a>           08-Feb-2016 06:00  187K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk.el">skk.el</a>                  08-Feb-2016 06:00  208K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="skk-vars.el">skk-vars.el</a>             08-Feb-2016 06:00  213K  
+<img src="/icons/unknown.png" alt="[   ]"> <a href="ChangeLog.3">ChangeLog.3</a>             08-Feb-2016 06:00  226K  
+<hr></pre>
+</body></html>

@@ -1,0 +1,5 @@
+2000-09-04  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* skkdict.py: New file.
+	* skknum.py: Ditto.
+	* test.py: Ditto.

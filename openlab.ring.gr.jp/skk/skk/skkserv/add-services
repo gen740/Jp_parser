@@ -1,0 +1,111 @@
+#!/bin/sh
+# add-services
+#
+# Add the following lines to /etc/services, or NIS "services" map
+# 	skkserv		1178/tcp
+# 
+# You can do it by hand.  If you want so, answer 'no' to the question.
+
+# will not check if I am "root"
+#USER=`whoami`
+#if test $USER != "root"
+#then
+# echo "You are not a superuser !"
+# exit 1
+#fi
+
+case $1 in
+
+0)	# do nothing
+	echo "There is nothing to do."
+	exit 0
+;;
+
+1) 	# not using NIS
+if grep skkserv /etc/services; then
+	echo "The service \"skkserv\" already exists in the file \"/etc/services\"."
+	echo "You have nothing to do about services."
+	exit 0
+else
+	echo "I will add an entry for skkserv into \"/etc/services\"."
+	echo -n "Can I do it now (yes or no) ?"
+	read answer
+	case xx$answer in
+	xxy*)
+		/bin/rm -f /etc/services.org
+		/bin/cp /etc/services /etc/services.org
+  		echo "skkserv		1178/tcp" >> /etc/services
+  		echo "Adding the new service \"skkserv\" DONE!"
+		exit 0
+		;;
+	*)	echo "You should add the following line to \"/etc/services\" by hand."
+  		echo "skkserv		1178/tcp"
+		exit 0
+		;;
+	esac
+fi
+;;
+2)	# NIS master server
+if ypcat services | grep skkserv ; then
+	echo "The service \"skkserv\" already exists in NIS \"services\" map."
+	echo "You have nothing to do about services."
+	exit 0
+else
+	echo "I will add an entry for skkserv into NIS \"services\" map"
+	echo -n "Can I do it now (yes or no) ?"
+	read answer
+	case xx$answer in
+	xxy*)
+		echo -n "Where is NIS map directory (default is /var/yp) ?"
+		read answer
+		case xx$answer in
+		xx) MAPDIR=/var/yp
+		    ;;
+		*)  MAPDIR=$answer
+		    ;;
+		esac
+		if test ! -d $MAPDIR
+		then
+		  echo "Such a directory does not exist. Please check it."
+		  exit 1
+		fi
+		/bin/rm -f /etc/services.org
+		/bin/cp /etc/services /etc/services.org
+ 		echo "skkserv		1178/tcp" >> /etc/services
+		(cd $MAPRDIR; make services)
+ 		echo "Adding skkserv into NIS \"services\" map DONE!"
+		exit 0
+		;;
+	*)	echo "You should (as the superuser) "
+		echo "(1) add the following line to \"/etc/services\","
+ 			echo "skkserv		1178/tcp"
+		echo "(2) do \"chdir /var/yp; make services\"."
+		exit 0
+		;;
+	esac
+fi
+;;
+
+3)	# NIS non-master 
+if ypcat services | grep skkserv ; then
+	echo "The service \"skkserv\" already exists in NIS \"services\" map."
+	echo "You have nothing to do about services."
+	exit 0
+else
+	echo "You should modify NIS \"services\" map, but it can only be done"
+	echo "on NIS master server (NOT this host, according to your answer)."
+	echo "Do the following on NIS master server."
+	echo "  (1) Become the superuser."
+	echo "  (2) Add the following line by hand."
+	echo "skkserv		1178/tcp"
+	echo "  (3) do \"chdir /var/yp; make services\"."
+	echo "If you cannot become the superuser of NIS-master server,"
+	echo "ask an appropriate person to modify NIS map as above."
+	exit 0
+fi
+;;
+
+*)	echo "Usage:	sh add-services n	(n=0,1,2,3)"
+	exit 1
+;;
+esac

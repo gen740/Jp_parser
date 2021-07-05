@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>SKK Openlab - DDSKK</title>
+  <link href="common.css" rel="stylesheet" type="text/css">
+  <link href="index.html" rel="index">
+  <link rev="MADE" href="mailto:skk@ring.gr.jp">
+</head>
+<body>
+<div id="globalnav">
+  <ul>
+    <li><a href="index.html">Top</a>
+    <li><a href="dic.html">SKK dictionaries</a> (<a href="dic" title="DownloadDic">Download</a>)
+    <li><a href="ddskk.html">DDSKK</a> (<a href="maintrunk" title="DownloadSKK">Download</a>)
+    <li><a href="doc.html">Documents</a>
+    <li><a href="ml.html">Mailing list</a>
+    <li><a href="dev.html">Development</a>
+    <li><a href="links.html">Links</a>
+  </ul>
+</div>
+
+<h1>Daredevil SKK (DDSKK)</h1>
+
+<div id="langswitch"><a href="ddskk-ja.html">Japanese</a></div>
+
+<h2>About DDSKK</h2>
+
+<p>Daredevil SKK (DDSKK) is an Emacs Lisp version of SKK.</p>
+
+<h2>Download DDSKK</h2>
+
+<ul>
+  <li><a href="https://github.com/skk-dev/ddskk">Most recent revisions in github</a></li>
+  <li><a href="maintrunk">SKK Openlab (this site)</a></li>
+  <li><a href="ftp://ftp.ring.gr.jp/pub/elisp/skk/maintrunk">Mirror site 1 (FTP)</a></li>
+  <li><a href="http://www.ring.gr.jp/archives/elisp/skk/maintrunk">Mirror site 2 (HTTP)</a></li>
+</ul>
+
+<p>If you use DDSKK 14.2 or later on Emacs 22 or later, then you no longer need to install <a href="http://git.chise.org/elisp/apel/">APEL</a>.</p>
+
+<p>Please install DDSKK 15.1 or later when using the DDSKK in GNU Emacs 24.3.</p>
+
+<p>You may want to obtain one or more of <a href="dic.html">SKK dictionaries</a>.</p>
+
+<h2>Manuals and other documents</h2>
+
+<p>Please refer to <a href="doc.html">the page on SKK documents</a>.</p>
+
+<div id="mailto">mailto: <a href="mailto:skk@ring.gr.jp">skk@ring.gr.jp</a></div>
+<div id="modtime">Last Modified: $Date: 2016/10/02 00:17:36 $</div>
+</body>
+</html>

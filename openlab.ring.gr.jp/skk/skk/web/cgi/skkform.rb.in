@@ -1,0 +1,848 @@
+#!/usr/local/bin/ruby -Ke -T
+# -*- coding: euc-jp -*-
+##!/usr/bin/ruby -Ke -T
+## Copyright (C) 2002, 2003 Mikio NAKAJIMA <minakaji@osaka.email.ne.jp>
+## Copyright (C) 2002 Kazuhiro NISHIYAMA <zn@mbf.nifty.com>
+## Copyright (C) 2004 Kimura Fuyuki <fuyuki@hadaly.org>
+## Copyright (C) 2004 MITA Yuusuke <clefs@mail.goo.ne.jp>
+##
+## Author: Mikio NAKAJIMA <minakaji@osaka.email.ne.jp>
+## Maintainer: SKK Development Team <skk@ring.gr.jp>
+## Version: $Id: skkform.rb.in,v 1.5 2010/11/04 14:18:00 czkmt Exp $
+## Keywords: japanese, dictionary
+## Last Modified: $Date: 2010/11/04 14:18:00 $
+##
+## This program is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation; either version 2, or (at your option)
+## any later version.
+
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## General Public License for more details.
+
+## You should have received a copy of the GNU General Public License
+## along with this program, see the file COPYING.  If not, write to the
+## Free Software Foundation Inc., 59 Temple Place - Suite 330, Boston,
+## MA 02111-1307, USA.
+##
+### Commentary:
+# http://www.rubycgi.org/cgi_explanation/2-7.htm を参考にした。
+#
+# アスキー刊の「オブジェクト指向スクリプト言語ruby」の 121 頁から拝借した
+# csv_split 関数については、その著書の一人であるまつもとゆきひろさんに、
+# パブリックドメイン扱いで良いとの許可を得た(2002/07/10)。
+#
+# <log format> -- csv format
+# midasi,candidate,hinsi,yourei,goodict,daijisen,date,search_engine_cache,remote_host,remote_addr,daijisen_url_cache,goo_hit_number
+# めしあg,召し上,その他,,○,×,07/09/02 08:17:56,"めしあがる,召し上がる",localhost,127.0.0.1
+# ちょうば,跳馬,その他,,○,×,07/09/02 06:28:08,,localhost,127.0.0.1
+# おじぎそう,含羞草,その他,,○,○,04/04/03 14:45:54,,localhost,127.0.0.1
+# <TODO>
+
+Debug = false
+
+# $COMPAT_VERSION = "1.6"
+# require "./cgisup"
+require 'cgi'
+require 'cgi-lib' if Debug
+require 'jcode'
+require 'kconv'
+require 'socket'
+require 'timeout'
+
+CR = "\015"
+LF = "\012"
+CRLF = CR + LF
+BR = "<br>"
+# for debugging
+if Debug
+  SUCCESSIVE_ACCESS_SECONDS = 0
+  TMPDIRECTORY = '/tmp/'
+  DICDIRECTORY = '/home/minakaji/progs/ring/skk/dic/'
+  PRIVATEBINDIR = '/usr/local/bin/'
+  LOCKDIRNAME = '/home/minakaji/progs/ring/skk/web/test/registdic.log.lock'
+  LOGDIRECTORY = '/home/minakaji/progs/ring/skk/web/test/'
+  Logdirectory = './'
+else
+  SUCCESSIVE_ACCESS_SECONDS = 10
+  TMPDIRECTORY = '/circus/openlab/skk/tmp/'
+  DICDIRECTORY = '/circus/openlab/skk/skk/dic/'
+  PRIVATEBINDIR = '/usr/home/minakaji/bin/'
+  ALTERNATIVEBINDIR = '/usr/home/czkmt/bin/'
+  LOCKDIRNAME = '/circus/openlab/skk/tmp/registdic.log.lock/'
+  LOGDIRECTORY = '/circus/openlab/skk/log/'
+  # Dir.glob(pattern) doesn't work if Logdirectory is a full path representation...?  (newcomments.cgi and search.cgi)
+  # local tests could go w/o it, but is left just in case.
+  Logdirectory = './log/'
+end
+LOGFILENAME = LOGDIRECTORY + 'registdic.log'
+Logfilename = Logdirectory + 'registdic.log'
+
+
+# cvs repositry 上には具体的な IP を登録しない。openlab.jp/skk に置くときに必要に応じ書く。
+# BLACK_LIST = "/xxx.xxx.xxx.xxx|yyy.yyy.yyy.yyy/"
+BLACK_LIST = ""
+
+# reducing queries by reordering them in order of frequency
+Okurigana = {
+  "a" => ["あ"],
+  "b" => ["び", "びる", "ぶ","ばしい", "ばむ", "ば",  "ばる", "べる", "べ", "びせる", "びせ", "ぼす", "ぼ"],
+  "c" => ["ち", "ちる", "っちょろい"],
+  "d" => ["だ", "ぢ", "づ", "で", "ど"],
+  "e" => ["え", "える"],
+  "f" => ["ふ", "へ", "ほ"],
+  "g" => ["が", "がり", "がる", "ぎ", "ぎる", "ぐ", "げ", "げる", "ご"],
+  "h" => ["は", "ひ", "ふ", "へ", "ほ"],
+  "i" => ["い", "いる"],
+  "j" => ["ざる", "じ", "じる"],
+  "k" => ["き", "きる", "く", "ける", "か", "かう", "かし", "かしい", "かす", "かぶ", "かる", "きい", "くす", "け", "こ", "こす", "こえる", "こる"],
+  "m" => ["む", "み", "め", "める", "ます", "まり", "まる", "まれる", "まえる", "ま", "も", "めく", "もしい", "もる"],
+  "n" => ["ぬ", "に", "な", "ない", "なう", "なる", "ね", "ねる", "の", "ん"],
+  "o" => ["お"],
+  "p" => ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ", "っぽい"],
+  "r" => ["る", "り", "りる", "れ", "れる", "ろ", "ら", "らう", "らえる", "らか", "らぐ", "らしい", "らす", "らむ", "るい", "れむ", "れやか", "ろす", "ろし", "ろしい"],
+  "s" => ["す", "する", "し", "しい", "さ", "さい", "さえる", "しむ", "せ", "せる", "そ"],
+  "t" => ["つ" ,"ちる", "てる", "ち", "た", "たい", "たる", "っ", "って", "て", "と", "とす", "つく"],
+  "u" => ["う", "うい"],
+  "w" => ["わしい", "わす", "わる", "わせ", "わせる", "われる", "わ", "わう", "を"],
+  "x" => ["ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "ゃ", "ゅ", "ょ", "ゎ", "ゐ", "ゑ"],
+  "y" => ["ゃ", "や", "やか", "やす", "ゅ", "ゆ", "ょ", "よ"],
+  "z" => ["ず", "ずる", "じ", "じる", "ぜる", "ぜ", "ざる", "ざ", "ぞ"],
+}
+
+GyakuhikiOkurigana = [
+  ["あ" , "a"],
+  ["ば" , "b"], ["び" , "b"], ["ぶ" , "b"], ["べ" , "b"], ["ぼ" , "b"],
+  ["だ" , "d"], ["ぢ" , "d"], ["づ" , "d"], ["で" , "d"], ["ど" , "d"],
+  ["え" , "e"],
+  ["が" , "g"], ["ぎ" , "g"], ["ぐ" , "g"], ["げ" , "g"], ["ご" , "g"],
+  ["は" , "h"], ["ひ" , "h"], ["ふ" , "h"], ["へ" , "h"], ["ほ" , "h"],
+  ["い" , "i"],
+  ["じ" , "j"],
+  ["か" , "k"], ["き" , "k"], ["く" , "k"], ["け" , "k"], ["こ" , "k"],
+  ["ま" , "m"], ["み" , "m"], ["む" , "m"], ["め" , "m"], ["も" , "m"],
+  ["な" , "n"], ["に" , "n"], ["ぬ" , "n"], ["ね" , "n"], ["の" , "n"], ["ん" , "n"],
+  ["お" , "o"],
+  ["ぱ" , "p"], ["ぴ" , "p"], ["ぷ" , "p"], ["ぺ" , "p"], ["ぽ" , "p"],
+  ["ら" , "r"], ["り" , "r"], ["る" , "r"], ["れ" , "r"], ["ろ" , "r"],
+  ["さ" , "s"], ["し" , "s"], ["す" , "s"], ["せ" , "s"], ["そ" , "s"],
+  ["た" , "t"], ["ち" , "t"], ["っ" , "t"], ["つ" , "t"], ["て" , "t"], ["と" , "t"],
+  ["う" , "u"],
+  ["わ" , "w"], ["を" , "w"],
+  ["ぁ" , "x"], ["ぃ" , "x"], ["ぅ" , "x"], ["ぇ" , "x"], ["ぉ" , "x"],
+  ["ゃ" , "x"], ["ゅ" , "x"], ["ょ" , "x"], ["ゎ" , "x"], ["ゐ" , "x"], ["ゑ" , "x"],
+  ["ゃ" , "y"], ["や" , "y"], ["ゅ" , "y"], ["ゆ" , "y"], ["ょ" , "y"], ["よ" , "y"],
+  ["ざ" , "z"], ["じ" , "z"], ["ず" , "z"], ["ぜ" , "z"], ["ぞ" , "z"]
+]
+
+Hinsi = {
+  "etc" => "その他",
+  "geographic" => "地名",
+  "firstname" => "姓",
+  "lastname" => "名",
+  "name" => "その他の人名(フルネームなど)",
+  "propernoun" => "その他の固有名詞",
+  "assoc" => "連想",
+  "wrong" => "誤登録",
+}
+
+LogFields = {
+  "key" => 0,
+  "candidate" => 1,
+  "hinsi" => 2,
+  "yourei" => 3,
+  "goodict" => 4,
+  "yahoodict" => 5,
+  "date" => 6,
+  "search_engine_cache" => 7,
+  "rh" => 8,
+  "ra" => 9,
+  "u" => 10,
+  "goo" => 11,
+
+  # aliases
+  "midasi" =>0,
+  "word" =>1,
+  "daijisen" => 5,
+  "goohits" => 11,
+}
+
+class Cvsdic
+  def initialize(file)
+    # @ldic = '/circus/openlab/skk/skk/dic/SKK-JISYO.L'
+    @dic = file
+  end
+
+  def include?(key, word)
+    if !(key && !key.empty?)
+      return $errmsg = "<p><b>ERROR:</b> 見出し語がありません!"
+    elsif !(word && !word.empty?)
+      return $errmsg = "<p><b>ERROR:</b> 候補がありません!"
+    end
+#    expr2 = PRIVATEBINDIR + 'skkdic-expr2'
+    expr2 = ALTERNATIVEBINDIR + 'skkdic-expr2'
+    tmpdir = TMPDIRECTORY
+    tmpfile_base = tmpdir + 'skkdic-expr2_' + "#{Process.pid}"
+    result_string = false
+    key = Kconv.toeuc(key)
+    word = Kconv.toeuc(word)
+    tmpfile0 = tmpfile_base + '.00'
+    tmpfile1 = tmpfile_base + '.01'
+    File.open(tmpfile0, "w+") do |file_handler|
+      file_handler.print "#{key} /#{word}/\n"
+    end
+    command = expr2  + ' ' + tmpfile0 + ' ^ ' + @dic + ' >' + tmpfile1
+    begin
+      escaped_word = word.gsub(/[\[\]\{\}\(\)\|\+\*\.\^\$\&\\]/, '\\\\\&')
+      print "<html><body>word=#{word}, escaped_word=#{escaped_word}<br>" if Debug
+      if system(command)
+	File.foreach(tmpfile1) do |line|
+	  if (line =~ /#{key} \/#{escaped_word}(;[^\/]+)*\//o)
+	    return true
+	  end
+	end
+      end
+    rescue Exception
+      print "<html><body>ERROR: #$!\n</body></html>"
+    ensure
+      File.unlink(tmpfile0)
+      File.unlink(tmpfile1)
+    end
+    return false
+  end
+
+  def include_key(key)
+    if !(key && !key.empty?)
+      return $errmsg = "<p><b>ERROR:</b> 見出し語がありません!"
+    end
+    tmpdir = TMPDIRECTORY
+    tmpfile_base = tmpdir + 'grep_' + "#{Process.pid}"
+    result_string = false
+    key = Kconv.toeuc(key)
+    tmpfile0 = tmpfile_base + '.00'
+    tmpfile1 = tmpfile_base + '.01'
+    File.open(tmpfile0, "w+") do |file_handler|
+      escaped_key = key.gsub(/[\[\]\{\}\(\)\|\+\*\.\^\$\&]/, '\\\\\&')
+      file_handler.print "^#{escaped_key} "
+    end
+    command = '/usr/bin/grep -f ' + tmpfile0 + ' ' + @dic + ' >' + tmpfile1
+    begin
+      if system(command)
+	File.foreach(tmpfile1) do |line|
+	  return line
+	end
+      end
+    rescue Exception
+      print "<html><body>ERROR: #$!\n</body></html>"
+    ensure
+      File.unlink(tmpfile0)
+      File.unlink(tmpfile1)
+    end
+    return nil
+  end
+end
+
+class String
+  def to_katakana
+    self.gsub(/う゛/, '\\1ヴ').tr('ぁ-ん', 'ァ-ン')
+  end
+
+  def to_hiragana
+    self.gsub(/ヴ/, 'う゛').tr('ァ-ン', 'ぁ-ん')
+  end
+
+  def cut_off_prefix_postfix
+    self.sub(/^[<>\?]([ーぁ-ん]+)$/, '\1').sub(/^([ーぁ-ん]+)[<>\?]$/, '\1')
+  end
+
+  # from 「オブジェクト指向スクリプト言語ruby」p121
+  def csv_split(delimiter = ',')
+    csv = []
+    data = ""
+    self.split(delimiter).each do |d|
+      if data.empty?
+	data = d
+      else
+	data += delimiter + d
+      end
+      if /^"/ =~ data
+	if /[^"]"$/ =~ data or '""' == data
+	  csv << data.sub(/^"(.*)"$/, '\1').gsub(/""/, '"')
+	  data = ''
+	end
+      else
+	csv << d
+	data = ''
+      end
+    end
+    raise "cannot decode CSV\n" unless data.empty?
+    csv
+  end
+
+  def csv_quote
+    self.gsub(/"/, '\\"').sub(/.*,.*/, '"\&"')
+  end
+
+  def csv_unquote
+    self.sub(/^\"(.+)\"$/, '\1')
+  end
+
+  # 09/30/04 => 04/09/30
+  def mdy2ymd
+    self.sub(/^([0-9]*)\/([0-9]*)\/([0-9]*)/, '\3/\1/\2')
+  end
+end
+
+#ファイルロッククラス
+class FileLockDir
+  def lock(lockdir)
+    Dir.mkdir(lockdir)
+    return true
+  rescue Errno::EEXIST
+    return false
+  end
+
+  def unlock(lockdir)
+    Dir.rmdir(lockdir)
+    return true
+  rescue
+    return false
+  end
+end
+
+class Goo
+  def search(key)
+    hits = tries = 0
+    key = Kconv.toeuc(key)
+    key = CGI::escape(key)
+    timeout(20) {
+      begin
+	tries += 1
+	sock = TCPSocket.open("search.goo.ne.jp", 80)
+	sock.printf("GET /web.jsp?DC=1&MT=\"%s\" HTTP/1.0\r\n\r\n", key)
+	sock.readlines.each do |line|
+	  line = Kconv.toeuc(line)
+	  if (/<b>約*([,0-9]+)<\/b>件中/ =~ line)
+	    hits = $1.gsub(/,/, '').to_i
+	    return hits if hits > 0
+	  # 0hits, or system error?
+	  elsif (/<br>該当する検索結果が見当たりません。/ =~ line)
+	  #elsif (/<br>検索システムから検索結果を正常に取得できなかった可能性があります。/ =~ line) next
+	    return 0
+	  end
+	end
+      ensure
+	sock.close if sock
+      end while tries < 3 && hits < 1
+    }
+    "unknown"
+  end
+end
+
+# &kind=
+GooDictType = {
+  "japanese" => "jn",
+  "jn" => "jn",
+  "ej" => "ej",
+  "je" => "je",
+  #"all" => n/a
+}
+# &mode=
+GooDictMode = {
+  "forward" => 0,
+  "full" => 1,
+  "backward" => 2,
+  "body" => 3,
+  #"partial" => n/a
+}
+# &dtype=
+YahooDictType = {
+  "japanese" => 0,
+  "jn" => 0,
+  "ej" => 1,
+  "je" => 1,
+  "english" => 1,
+  "all" => 2,
+}
+# &stype=
+YahooDictMode = {
+  "forward" => 0,
+  "full" => 1,
+  "partial" => 2,
+  "backward" => 3,
+  "body" => 4,
+}
+
+# superclass for misc. web dictionary service classes
+class WebDict
+  def initialize
+    @found = '×'
+    @cache = ''
+  end
+
+  def set_found(string)
+    @found = string
+  end
+
+  def found
+    @found
+  end
+
+  def cache
+    @cache
+  end
+
+  def _search(key, type, host, query, flags = "")
+    @found = '×'
+    @cache = ''
+    v = Array.new
+    return v if key.nil?
+    timeout(20) {
+      begin
+	sock = TCPSocket.open(host, 80)
+	sock.print(query)
+	sock.readlines.each do |line|
+	  temp = _pickup(key, type, Kconv.toeuc(line))
+	  v = v + temp if !(temp.empty?)
+	  if flags =~ /generous/
+	    temp = _pickup(key, type, Kconv.toeuc(line), flags)
+	    v = v + temp if !(temp.empty?)
+	  end
+	end
+	if !(v.empty?)
+	  v.each do |candidate|
+	    temp = candidate.gsub(/(.)(\1)/, '\1' + "々")
+	    if !v.include?(temp)
+	      v.push(temp)
+	    end
+	  end
+	end
+      ensure
+	sock.close if sock
+      end
+    }
+    if Debug
+      print "<html><body>key=#{key}<br>"
+      p key,type,host,query,flags
+      print "<br>"
+      p v
+      print "<br>"
+    end
+    v
+  end
+
+  # NOTE: "generous" flag is a replacement of 'kind=jnr' / 'dtype=-1' kludges
+  # that handled to_hiragana conversion
+  def search_with_okuri_process(key, candidate, type = "japanese", mode = "full", flags = "generous")
+    #key := 'そぶr', candidate := '素振'
+    return false unless /^([ーぁ-ん]+)([a-z])$/ =~ key
+    key = $1 #'そぶ'
+    # perfect match always fails if forward match does
+    return false if !(okurigana = Okurigana[$2])
+    return false if mode == "full" && search(candidate, type, "forward", flags).empty?
+    okurigana.each do |char|
+      if search(key + char, type, mode, flags).include?(candidate + char)
+	return (key + char), (candidate + char)
+      end
+    end
+    false
+  end
+end
+
+class GooDict < WebDict
+  def search(key, type = "japanese", mode = "full", flags = "generous")
+    key = key.cut_off_prefix_postfix
+    _search(key, type, "dictionary.goo.ne.jp", "GET /search.php?MT=#{CGI::escape(key)}&kind=#{GooDictType[type]}&mode=#{GooDictMode[mode]}&DC=1 HTTP/1.0\r\n\r\n", flags)
+  end
+
+  def _pickup(key, type, line, flags = "")
+    switch = GooDictType[type]
+    v = Array.new
+    if (switch == 'ej')
+      if (/^<font color=\"#[a-z0-9]+\"><b>([^<>]+)<\/b><\/font>/ =~ line)
+	v.push($1.gsub(/・/, ''))
+      end
+    elsif (switch == 'jn' && flags =~ /generous/)
+      #<b>パンや</b> <sub>1</sub> 【―屋】</font>
+      if /<b>([-・ーヴァ-ン]+)([-ぁ-ん]+)<\/b>[　― ーヴぁ-んァ-ン]+ *<sub>[ 0-9]+<\/sub> 【―[^―]+】/ =~ line
+	temp1 = $1
+	temp2 = $2
+	temp1 = temp1.to_hiragana.sub(/-/, '')
+	temp2 = temp2.sub(/-/, '')
+	v.push(temp1 + temp2)
+      elsif /<b>([-ぁ-ん]+)([-・ーヴァ-ン]+)<\/b>[　― ーヴぁ-んァ-ン]+ *<sub>[ 0-9]+<\/sub> 【[^―]+―】/ =~ line
+	temp1 = $1
+	temp2 = $2
+	temp1 = temp1.sub(/-/, '')
+	temp2 = temp2.to_hiragana.sub(/-/, '')
+	v.push(temp1 + temp2)
+	#<b>ようさい</b> <sub>0</sub> 【溶<sup>▼</sup>滓/<sup>▼</sup>鎔<sup>▼</sup>滓】
+	#<b>ほうき</b>　はう―  <sub>1</sub> 【邦<sup>▼</sup>畿】</font>
+      elsif /<b>([・ーヴァ-ンぁ-ん]+)<\/b>[　― ーぁ-ん]+ *<sub>[ 0-9]+<\/sub> 【.+】/ =~ line
+	temp1 = $1
+	temp1 = temp1.sub(/・/, '')
+	v.push(temp1)
+	@cache = temp1
+	v.push(temp1.to_hiragana)
+      end
+    elsif (switch == 'jn')
+      if (/【(.*)】/ =~ line) ||
+	  #<font color="#cc3333"><b>マイル</b> <sub>1</sub> [mile]</font>
+	  (/^<font color=\"#[a-z0-9]+\"><b>([^<>]+)<\/b> <sub>[0-9]+<\/sub> \[#{Regexp.quote(key)}\]<\/font>/ =~ line)
+	target = $1
+	target.gsub!(/<sup>▼<\/sup>/, '')
+	target.gsub!(/<sup>▽<\/sup>/, '')
+	while /([^】]+)】[^【]+【([^】]+)/ =~ target
+	  target = $1 + "・" + $2
+	end
+	target.gsub!(/\//, '・')
+	target.split("・").each {|word|
+	  word.gsub!(/<[^<>]+>|〈|〉|《|》/, '')
+	  if /(.+)（(.+)）/ =~ word
+	    #【行う（行なう）】
+	    v.push($1).push($2)
+	  elsif /\((.+)\)/ =~ word
+	    # <B>かばやき  【蒲焼(き)】  </B></TD>
+	    # <B>くりごと  【繰(り)言】  </B>
+	    temp = word
+	    while /(.*)\(([^()]+)\)(.*)/ =~ temp
+	      # with all characters with parens
+	      temp = $1 + $2 + $3
+	    end
+	    v.push(temp)
+	    temp = word
+	    while /(.*)\(([^()]+)\)(.*)/ =~ temp
+	      # without characters with parens
+	      temp = $1 + $3
+	    end
+	    v.push(temp)
+	    # XXX with/without characters with parens
+	  else
+	    v.push(word)
+	  end
+	}
+      end
+    end
+    v
+  end
+end
+
+# not used for the time being; needs rewriting anyway
+class LycosDict < WebDict
+  def search(key)
+    @found = '×'
+    v = Array.new
+    return v if key.nil?
+    key = key.cut_off_prefix_postfix
+    url = false
+    timeout(20) {
+      begin
+	sock = TCPSocket.open("jiten.www.infoseek.co.jp", 80)
+	sock.sync = true
+	url = "/Kokugo?qt=#{CGI::escape(Kconv.toeuc(key))}&sm=0&pg=result_k.html&col=KO"
+	sock.printf("GET %s HTTP/1.0\r\nHost: jiten.www.infoseek.co.jp\r\n\r\n" , url)
+	array = sock.readlines
+	#XXX
+	midasi= key.split("").join("-\?")
+	array.each do |line|
+	  line = Kconv.toeuc(line)
+	  #    <FONT COLOR=#FF0000><b>おりまぜる</b>  【織(り)交ぜる】<font size=5>
+	  if (/<FONT COLOR=#FF0000><b>#{midasi}<\/b>/ =~ line)
+	    #<b>きゅうしょく</b>　きう―   【休職】<font size=5>
+	    #<b>おりまぜる</b>	【織(り)交ぜる】<font size=5>
+	    while (/<b>#{midasi}<\/b>[　 ]+[^<>]*【([^<>]+)】<font size=[0-9]+>/ =~ line)
+	      temp = $1
+	      line = $'
+	      v = _pickup(temp, v)
+	    end
+	    #<big><b>きゅうしょく</b>　きう―  <font size=1>0</font> 【休職】</big>
+	    #<big><b>ちてき-ざいさんけん</b> <font size=1>6</font> 【知的財産権】</big>
+	  elsif (/<big><b>#{midasi}<\/b>[^<>]+<font size=1>[0-9]+<\/font> 【([^<]+)】<\/big>/ =~ line)
+	    v = _pickup($1, v)
+	  end
+	end
+      ensure
+	sock.close if sock
+      end
+    }
+    v
+  end
+
+  def _pickup(base, v)
+    base.split("・").each do |word|
+      # 織(り)交ぜる
+      if /(.*)\(([ぁ-ん])\)(.*)/ =~ word
+	temp = word
+	while /(.*)\(([ぁ-ん])\)(.*)/ =~ temp
+	  # with all characters with parens
+	  temp = $1 + $2 + $3
+	end
+	v.push(temp) if !v.include?(temp)
+	temp = word
+	while /(.*)\(([ぁ-ん])\)(.*)/ =~ temp
+	  # without characters with parens
+	  temp = $1 + $3
+	end
+	v.push(temp) if !v.include?(temp)
+	# XXX with/without characters with parens
+      else
+	v.push(word) if !v.include?(word)
+      end
+    end
+    v
+  end
+
+  def search_with_okuri_process(key, candidate)
+    #key := 'そぶr', candidate := '素振'
+    return false unless /^([ーぁ-ん]+)([a-z])$/ =~ key
+    key = $1 #'そぶ'
+    if !(okurigana = Okurigana[$2])
+      return false
+    else
+      okurigana.each do |char|
+	v = search(key + char)
+	if v.include?(candidate + char)
+	  return [(key + char), (candidate + char)]
+	end
+      end
+      false
+    end
+  end
+end
+
+# NOTE: now dic.yahoo.co.jp searches Daijirin if not matched in Daijisen
+class YahooDict < WebDict
+  def search(key, type = "japanese", mode = "full", flags = "generous")
+    key = key.cut_off_prefix_postfix
+    _search(key, type, "dic.yahoo.co.jp", "GET /bin/dsearch?p=#{CGI::escape(key)}&stype=#{YahooDictMode[mode]}&dtype=#{YahooDictType[type]}\r\n\r\n", flags)
+  end
+
+  def _pickup(key, type, line, flags = "")
+    dtype = YahooDictType[type]
+    v = Array.new
+    if (dtype == 1) #英和・和英
+      # <b>a・lo・ha</b>&nbsp;[発音記号]
+      if (/^<b>(.+)<\/b>&nbsp;\[.+\]/ =~ line)
+	v.push($1.gsub(/・/, ''))
+      end
+    elsif (dtype == 0 && flags =~ /generous/) #国語
+      #temp = line.scan(/>[‐・ーヴァ-ンぁ-ん]+&nbsp;【([^<>]+)】</)
+      temp = line.scan(/>[‐・ーヴァ-ンぁ-ん]+(?:&nbsp;)?【(.+?)】</)
+      temp.each do |target|
+	next if target.empty?
+	target = target[0]
+	target.gsub!(/<sup>.<\/sup>/, '')
+	target.gsub!(/\//, '・')
+	target.split("・").each {|word|
+	  if /(.+)（(.+)）$/ =~ word
+	    #【行う（行なう）】
+	    v.push($1).push($2)
+	  elsif /（(.+)）/ =~ word
+	    #【<sup>×</sup>蒲焼（き）】
+	    #【繰（り）言】
+	    temp1 = word
+	    while /(.*)（([^（）]+)）(.*)/ =~ temp1
+	      # with all characters with parens
+	      temp1 = $1 + $2 + $3
+	    end
+	    v.push(temp1)
+	    temp1 = word
+	    while /(.*)（([^（）]+)）(.*)/ =~ temp1
+	      # without characters with parens
+	      temp1 = $1 + $3
+	    end
+	    v.push(temp1)
+	    # XXX with/without characters with parens
+	  else
+	    v.push(word)
+	  end
+	}
+      end
+    elsif (dtype == 0) #国語
+      #temp = line.scan(/>([‐・ーヴァ-ンぁ-ん]+)&nbsp;【[^<>]+】</)
+      temp = line.scan(/>([‐・ーヴァ-ンぁ-ん]+)(?:&nbsp;)?【[^<>]+】</)
+      temp.each do |target|
+	if !target.empty?
+	  v.push(target[0].gsub(/[‐・]/, '').to_hiragana)
+	  @cache = target[0].gsub(/[‐・]/, '').to_hiragana
+	end
+      end
+    end
+    v
+  end
+end
+
+#class LogDict
+def _print_line_header
+  print <<-EOF
+  <table border="1"><tbody><tr>
+  <td align="center"><b>登録日時</b></td>
+  <td align="center"><b>エントリ (見出し語 /単語/) </b></td>
+  <td align="center"><b>品詞</b></td>
+  <td align="center"><b>用例等</b></td>
+  <td align="center"><a href="http://dictionary.goo.ne.jp"><b>大辞林</b></a></td>
+  <td align="center"><a href="http://dic.yahoo.co.jp/"><b>大辞泉</b></a></td>
+  <td align="center"><b><a href="http://search.goo.ne.jp">goo</a>ヒット数</b></td>
+  <td align="center"><b>コメント</b></td>
+  </tr>
+  EOF
+end
+
+def _print_line(line, showcomment = false)
+  rawkey,rawcandidate,hinsi,yourei,goodict,daijisen,date,search_engine_cache,rh,ra,url_cache,goo = line.csv_split
+  rawkey.gsub!(/\\"/, '"')
+  rawcandidate.gsub!(/\\"/, '"')
+  yourei.gsub!(/\\"/, '"')
+  _print_part1(rawkey, rawcandidate, hinsi, yourei, date, search_engine_cache)
+  _print_goodict(goodict, rawkey, rawcandidate, search_engine_cache)
+  _print_daijisen(daijisen, rawkey, rawcandidate, search_engine_cache)
+  _print_goo(rawkey, rawcandidate, search_engine_cache, goo)
+  _print_comment(rawkey, rawcandidate, showcomment)
+end
+
+def _print_part1(rawkey, rawcandidate, hinsi, yourei, date, search_engine_cache)
+  if search_engine_cache && !search_engine_cache.empty?
+    search_engine_cache = search_engine_cache.csv_unquote
+    google_key, google_candidate = search_engine_cache.csv_split
+  else
+    google_key = rawkey.sub(/^([ーぁ-ん]+)[a-z]$/, '\1').cut_off_prefix_postfix
+    google_candidate = rawcandidate
+  end
+  yourei = CGI::escapeHTML(yourei).gsub(/http:\/\/[-,.+~;\?\&=%\/\.0-9A-Za-z_#]+/, '<a href="\&">\&</a>')
+  print "<tr><td>#{date}</td><td><a href=\"http://www.google.co.jp/search?q=%22#{CGI::escape(Kconv.tosjis(google_key))}%22+%22#{CGI::escape(Kconv.tosjis(google_candidate))}%22&ie=Shift_JIS&lr=lang_ja\">#{CGI::escapeHTML(rawkey)}</a> /<a href=\"http://www.google.co.jp/search?q=%22#{CGI::escape(Kconv.tosjis(google_candidate))}%22&ie=Shift_JIS&lr=lang_ja\">#{CGI::escapeHTML(rawcandidate)}</a>/</td><td>#{hinsi}</td><td>#{yourei}</td>"
+end
+
+def _print_goodict(goodict, rawkey, rawcandidate, search_engine_cache)
+  if goodict == "×"
+    print "<td><a href=\"http://dictionary.goo.ne.jp/search.php?MT=#{CGI::escape(rawcandidate)}&kind=jn&mode=0\">×</a></td>"
+  elsif goodict == "△"
+    print "<td><a href=\"http://dictionary.goo.ne.jp/search.php?MT=#{CGI::escape(rawkey)}&kind=ej&mode=1\">△</a></td>"
+  else
+    if search_engine_cache && !search_engine_cache.empty?
+      search_engine_cache = search_engine_cache.csv_unquote
+      goo_key,goo_candidate = search_engine_cache.csv_split
+      #      elsif /^[ーぁ-ん]+[a-z]$/ =~ rawkey
+      #	goo_key, goo_candidate = @goodict.search_with_okuri_process(rawkey, rawcandidate)
+      #	if !goo_key
+      #	  goo_key, goo_candidate = @goodict.search_with_okuri_process(rawkey, rawcandidate, 'jnr')
+      #	end
+    else
+      goo_key = rawkey.cut_off_prefix_postfix
+      goo_candidate = rawcandidate
+    end
+    if (goo_key && !goo_key.empty?) || (goo_candidate && !goo_candidate.empty?)
+      if /[ーヴァ-ン]/ =~ goo_candidate
+	print "<td><a href=\"http://dictionary.goo.ne.jp/search.php?MT=#{CGI::escape(goo_candidate)}&kind=jn&mode=1\">#{goodict}</a></td>"
+      else
+	print "<td><a href=\"http://dictionary.goo.ne.jp/search.php?MT=#{CGI::escape(goo_key)}&kind=jn&mode=1\">#{goodict}</a></td>"
+      end
+    else
+      print "<td>×</td>"
+    end
+  end
+end
+
+def _print_daijisen(daijisen, rawkey, rawcandidate, search_engine_cache)
+  if daijisen == "×"
+    print "<td><a href=\"http://dic.yahoo.co.jp/bin/dsearch?p=#{CGI::escape(rawcandidate)}&stype=2&dtype=2\">×</a></td>"
+  elsif daijisen == "△"
+    print "<td><a href=\"http://dic.yahoo.co.jp/bin/dsearch?p=#{CGI::escape(rawkey)}&stype=1&dtype=1\">△</a></td>"
+  else
+    if search_engine_cache && !search_engine_cache.empty?
+      search_engine_cache = search_engine_cache.csv_unquote
+      daijisen_key,daijisen_candidate = search_engine_cache.csv_split
+      #      elsif /^[ーぁ-ん]+[a-z]$/ =~ rawkey
+      #	daijisen_key, daijisen_candidate = @daijisen.search_with_okuri_process(rawkey, rawcandidate)
+      #	if !daijisen_key
+      #	  daijisen_key, daijisen_candidate = @daijisen.search_with_okuri_process(rawkey, rawcandidate, 1, 0)
+      #	end
+    else
+      daijisen_key = rawkey.cut_off_prefix_postfix
+      daijisen_candidate = rawcandidate
+    end
+    if (daijisen_key && !daijisen_key.empty?) || (daijisen_candidate && !daijisen_candidate.empty?)
+      if /[ーヴァ-ン]/ =~ daijisen_candidate
+	print "<td><a href=\"http://dic.yahoo.co.jp/bin/dsearch?p=#{CGI::escape(daijisen_candidate)}&stype=1&dtype=0\">#{daijisen}</a></td>"
+      else
+	print "<td><a href=\"http://dic.yahoo.co.jp/bin/dsearch?p=#{CGI::escape(daijisen_key)}&stype=1&dtype=0\">#{daijisen}</a></td>"
+      end
+    else
+      print "<td>×</td>"
+    end
+  end
+end
+
+def _print_goo (key, candidate, search_engine_cache, goo)
+  if (!goo || goo.empty? || goo == "\n")
+    goo = 'unknown'
+  end
+  if search_engine_cache && !search_engine_cache.empty?
+    search_engine_cache = search_engine_cache.csv_unquote
+    key, candidate = search_engine_cache.csv_split
+  end
+  print "<td><a href=\"http://search.goo.ne.jp/web.jsp?MT=%22#{CGI::escape(candidate)}%22\">#{goo}</a></td>"
+end
+
+def _print_comment_contents(logfilename, lines)
+  # if not given, count them here
+  if lines.nil?
+    lines = 0
+    File.foreach(logfilename.untaint) do |line|
+      lines += 1
+    end
+  end
+  File.foreach(logfilename.untaint) do |line|
+    date,ip,host,comment,rate = line.csv_split
+    comment = comment.csv_unquote
+    comment = comment.gsub(/http:\/\/[-,.+~;\?\&=%\/\.0-9A-Za-z_#]+/, '<a href="\&">\&</A>')
+    print "<b>#{lines}：#{date}  登録希望度：#{rate}</b><br>#{comment}<br><br>\n"
+    lines -= 1
+  end
+end
+
+def _print_comment(key, word, showcomment = false)
+  logfilename = LOGDIRECTORY + CGI::escape(key) + '+' + CGI::escape(word) + '.log'
+  if File.exist?(logfilename.untaint)
+    lines = total_rate = 0
+    File.foreach(logfilename.untaint) do |line|
+      date,remote_addr,remote_host,comment,rate = line.chomp.csv_split
+      total_rate += rate.to_i
+      lines += 1
+    end
+
+    #comments = '○'
+    comments = lines.to_s + '/' + total_rate.to_s
+  else
+    comments = '新'
+  end
+  print "<td><a href=\"registcomment.cgi?midasi=#{CGI::escape(key)}&word=#{CGI::escape(word)}\">#{comments}</a></td></tr>\n"
+
+  # Experimental - display comments directly
+  # XXX assumes _print_part1; I know it's not the place to be,
+  # but it is here so that we don't have to count "lines" twice
+  if comments != '新' && showcomment
+    print "<tr><td>-</td><td align=center>〃</td><td>-</td><td>"
+    _print_comment_contents(logfilename, lines)
+    print "</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+  end
+end
+#end
+
+def has_in_log(key, candidate)
+  begin
+    key_mod = key.gsub(/\\/, '\\\\\\\\').gsub(/"/, '\\\\\\"').gsub(/[\(\)\[\]\*\.\^\$]/, '\\\\\&')
+    candidate_mod = candidate.gsub(/\\/, '\\\\\\\\').gsub(/"/, '\\\\\\"').gsub(/[\(\)\[\]\*\.\^\$]/, '\\\\\&')
+    print key, " , ", key_mod , " , ", candidate, " , ", candidate_mod, "." if Debug
+    lineno = 0
+    File.foreach(LOGFILENAME) do |line|
+      lineno += 1
+      return lineno, line if line =~ /^#{key_mod},"?#{candidate_mod}"?,/
+    end
+    return nil,nil
+  rescue Errno::ENOENT
+  end
+end
+
+# end of registdic.cgi

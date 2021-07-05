@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+  <title>SKK Openlab - SKK の特徴</title>
+  <link href="common.css" rel="stylesheet" type="text/css">
+  <link href="index-j.html" rel="index">
+  <link rev="MADE" href="mailto:skk@ring.gr.jp">
+</head>
+<body>
+<div id="globalnav">
+  <ul>
+    <li><a href="index-j.html">トップ</a>
+    <li><a href="dic-ja.html">SKK 辞書</a> (<a href="dic" title="DownloadDic">ダウンロード</a>, <a href="wiki/wiki.cgi?page=FrontPage">Wiki</a>)
+    <li><a href="ddskk-ja.html">DDSKK</a> (<a href="maintrunk" title="DownloadSKK">ダウンロード</a>)
+    <li><a href="doc-ja.html">ドキュメント</a>
+    <li><a href="ml-ja.html">メーリングリスト</a>
+    <li><a href="dev-ja.html">開発</a>
+    <li><a href="wiki/wiki.cgi?page=%A5%EA%A5%F3%A5%AF%BD%B8">リンク</a>
+  </ul>
+</div>
+
+<h1>SKKの主な特徴</h1>
+
+<div id="langswitch"><a href="features.html">English</a></div>
+
+<ul>
+  <li>いわゆるローマ字入力による文字入力システムです(カスタマイズにより、日本語 106 キーボードでの仮名入力や、<a href="http://nicola.sunicom.co.jp/">NICOLA (NIhongo nyuryoku COnsortium LAyout)</a> キーボードのエミュレーション、<a href="http://www.crew.sfc.keio.ac.jp/~chk/">TUT-code</a>, <a href="http://openlab.jp/tcode/index.html">T-Code</a>による入力も可能です)。
+
+  <li>変換単位を通常1単語に抑え、<strong>文法的知識を用いない変換アルゴリズム</strong>を用いています。方言、文語、口語、古語、現代語等のいずれについても同様に効率的な変換ができます。
+
+  <li>「個人辞書」にない単語をサーバなどから検索し確定した場合、単語をどんどん「個人辞書」に取り込むドラスティックな方法を取っています。「個人辞書」を最優先し、個人で使用頻度の高い候補順に変換されるので、<strong>ヒット率が非常に高い</strong>です。
+
+  <li>辞書にない単語の変換を行なった場合には、自動的に再帰的な辞書登録モードに入ります。また、登録の際に品詞の指定は不要で文法的知識を必要としません。<strong>単語登録の手間が大幅に簡略化</strong>されています。
+
+  <li>サーバープログラムを使用しなくともSKKを使用することが可能です。
+
+  <li>インクリメンタルサーチ用のプログラムを独自に持っており、<strong>日本語のサーチの際に特別の操作を要しません。</strong>
+
+  <li>変換候補としてEmacs Lispで書かれたプログラムを指定することが可能で、<strong>現在の時刻や日付、単位換算した数値などを出力することが可能です</strong> (Emacsに簡単な計算をさせる機能などが標準で付いています)。
+
+  <li>オプションとして、UNIX lookコマンドを用いた検索や、<a href="http://openlab.jp/edict/lookup/">Lookup</a>を用いた検索など資源を最大限に生かした辞書検索ができます。
+
+  <li>Emacsのマイナーモードとしてインプリメントされており、SKKを起動しても日本語の入力が可能となる他は、メジャーモードにほとんど影響を与えず、<strong>Emacsとの親和性が高い</strong>です。
+</ul>
+
+<p>なお、<a href="http://yougo.ascii.jp">アスキーデジタル用語辞典</a>に <a href="http://yougo.ascii.jp/caltar/SKK">SKK の概略</a>が掲載されています。(ローマ字入力専用、と紹介しているのを直して欲しいと申し入れんですが無視されました...</p>
+
+<div id="mailto">mailto: <a href="mailto:skk@ring.gr.jp">skk@ring.gr.jp</a></div>
+<div id="modtime">Last Modified: $Date: 2015/01/04 03:11:23 $</div>
+</body>
+</html>

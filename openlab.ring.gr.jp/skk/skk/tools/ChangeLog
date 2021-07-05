@@ -1,0 +1,566 @@
+2015-01-21  SASAKI Nobuyuki  <nathancorvussolis@gmail.com>
+
+	* Update READMEs/FAQ.txt
+
+2013-07-18  Tsuyoshi Kitamoto  <tsuyoshi.kitamoto@gmail.com>
+
+	* Version 1.3.3 released.
+
+2013-07-13  Tatsuya Kinoshita  <tats@vega.ocn.ne.jp>
+
+	* compile, config.sub, config.guess, depcomp, install-sh:
+	* ltmain.sh, missing: Update with Debian libtool 2.4.2-1.3.
+
+2013-07-13  Tsuyoshi Kitamoto  <tsuyoshi.kitamoto@gmail.com>
+
+	* skk2cdb.py: Move from dic/skk2cdb.py.
+
+2013-05-30  Tsuyoshi Kitamoto  <tsuyoshi.kitamoto@gmail.com>
+
+	Suggested by Tatsuya Kinoshita <tats@vega.ocn.ne.jp>.
+
+	* dbm/makedbmdic5: Use Getopt::Std (Perl 5.16) instead of
+	getopts.pl (Perl 5.14) .
+
+2013-05-21  Tatsuya Kinoshita  <tats@vega.ocn.ne.jp>
+
+	* convert2skk/aozora2skk.rb, convert2skk/canna2skk.rb:
+	* convert2skk/chasen2skk.rb, convert2skk/ctdicconv.rb:
+	* convert2skk/ipadic2skk.rb, convert2skk/prime2skk.rb:
+	* convert2skk/skk-wordpicker.rb, filters/abbrev-convert.rb:
+	* filters/annotation-filter.rb, filters/asayaKe.rb:
+	* filters/complete-numerative.rb, filters/conjugation.rb:
+	* filters/make-tankan-dic.rb, filters/skkdictools.rb: Add magic
+	comment for Ruby 1.9.
+
+2013-05-20  Tatsuya Kinoshita  <tats@vega.ocn.ne.jp>
+
+	* convert2skk/aozora2skk.rb, convert2skk/chasen2skk.rb:
+	* convert2skk/ctdicconv.rb, convert2skk/ipadic2skk.rb:
+	* convert2skk/prime2skk.rb, convert2skk/skk-wordpicker.rb:
+	* filters/abbrev-convert.rb, filters/annotation-filter.rb:
+	* filters/make-tankan-dic.rb: Check RUBY_VERSION to prevent
+	LoadError of `jcode' for Ruby 1.9.
+
+2013-01-08  Keisuke Kawahara  <kyohsuke@conafie.jp>
+
+	* skkdic-expr.c (add_okuri_item, subtract_okuri_item)
+	(subtract_okuri_tail_line, okuri_type_out): Fix failing build
+	under clang on Mac OSX.
+
+2011-04-10  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Version 1.3.2 released.
+
+2011-04-10  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* configure: Regenerate.
+	* configure.ac: Check for dbm when --with-gdbm fails for
+	gdbm/ndbm.h.
+
+2011-04-07  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* VERSION: Bump to 1.3.2.
+	* configure: Regenerate.
+	* configure.ac: Fix the check for gdbm/ndbm.h.
+
+2011-04-06  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	Suggested by Tatsuya Kinoshita <tats@vega.ocn.ne.jp>.
+
+	* compile, config.sub, config.guess, depcomp, install-sh,
+	ltmain.sh, missing: Update to versions from libtool 2.2.10.
+
+2011-04-05  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Makefile.in (skkdic-expr, skkdic-sort, skkdic-count): Use
+	LDFLAGS.
+	* configure: Regenerate.
+	* configure.ac: Check gdbm/ndbm.h.
+	* config.h.in: Add HAVE_GDBM_NDBM_H.
+	* skkdic-expr.c: Remove old copy of gdbm/ndbm.h.  Include
+	gdbm/ndbm.h for libgdbm.
+
+2011-04-02  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* configure: Regenerate with Autoconf 2.66.
+
+2007-09-30  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Version 1.3.1 released.
+
+2007-09-29  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* VERSION: 1.3.1.
+
+2007-09-22  Tatsuya Kinoshita  <tats@vega.ocn.ne.jp>
+
+	* skkdic-expr2.c (splitCandidates): Use glib data types.
+	Do not do type conversion in calculating the 2nd arg of
+	gstrndup().
+
+2007-09-22  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Version 1.3 released.
+
+2007-09-21  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Makefile.in (tar): Do not create bzip2 archive.
+	* VERSION: 1.3.
+
+2007-09-19  Tatsuya Kinoshita  <tats@vega.ocn.ne.jp>
+
+	* skkdic-expr.c: Transiently define snprintf() for old systems.
+
+2007-09-20  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* config.h.in: Add HAVE_SNPRINTF.
+
+2007-09-17  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* configure.ac, config.h.in: Check for unistd.h.
+
+	* skkdic-expr.c: Include stdlib.h, string.h.
+	Include unistd.h if HAVE_MKDTEMP and HAVE_UNISTD is defined.
+
+	* skkdic-sort.c: Include stdlib.h.
+
+2007-09-17  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* skkdic-expr.c (main): Fix my mistakes, i.e. old code for setting
+	tmpdir was not deleted.  Fixed.  Also revert bad codes to the
+	original.
+
+2007-09-17  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	Patches by Tatsuya Kinoshita <tats@debian.org>.
+
+	* configure.ac: Check for mkdtemp().
+
+	* skkdic-expr.c (main): Use mkdtemp() if it is available.
+	Set tmpdir to the TMPDIR environment variable if it is defined.
+
+2007-09-17  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	Suggested by Tatsuya Kinoshita <tats@debian.org>.
+
+	* skkdic-expr.c (db_remove_files, main): Use snprintf() instead of
+	sprintf().
+
+2007-09-17  Tatsuya Kinoshita  <tats@debian.org>
+
+	* skkdic-expr.c (main): Safely create temporary subdirectory to
+	avoid symlink attacks overwriting arbitrary files.
+
+2006-10-04  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	Suggested by Tatsuya Kinoshita <tats@vega.ocn.ne.jp>.
+
+	* Makefile.in: Set VERSION according to file `VERSION'.
+
+	* VERSION: Bump to 1.2.
+
+	* convert2skk/doc2skk.sh: Comment out unused elif where program is
+	checking for $sourcefile.
+
+2006-01-30  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+
+	* filters/make-tankan-dic.rb: New file.
+
+2006-01-29  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Version 1.2 released.
+
+2006-01-29  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Makefile.in: Check for configure.ac instead of configure.in.
+
+	* configure.in: No longer in repository.
+
+2006-01-04  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* *: Update FSF address.
+
+2005-12-25  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* COPYING: Install the most recent one.
+
+2005-10-24  anonymous contributor @ wiki
+	* skkdic-expr2.c: fix for okuri-ari entries starting with '>' or '#'
+
+2005-10-24  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+	* filters/conjugation.rb:
+
+	better handling of '<'
+
+	* READMEs/README.filters:
+	* filters/README:
+	* filters/abbrev-convert.rb:
+	* filters/skkdictools.rb:
+
+	aesthetic changes.
+
+	* skkdic-sort.c: fix for okuri-ari entries starting with '>' or '#'
+
+2005-09-23  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+	* skkdic-count.c:
+	* skkdic-expr.c:
+	* skkdic-expr2.c:
+
+	BLEN enlarged to 65536. (better use mmap?)
+
+	* convert2skk/chasen2skk.rb:
+	* convert2skk/skk-wordpicker.rb:
+
+	better '々' handling.
+
+	* convert2skk/doc2skk.sh: -P option to stop using skkdic-expr2.
+
+2005-09-20  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+	* convert2skk/chasen2skk.rb: some grammatical rules added.
+	* convert2skk/skk-wordpicker.rb: --katakana-only
+	* filters/conjugation.rb: ignore comments after '¶'.
+	* filters/skkdictools.rb: String.concatify
+
+2005-08-29  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+	* convert2skk/chasen2skk.rb:
+	* convert2skk/skk-wordpicker.rb:
+	* convert2skk/aozora2skk.rb:
+	* convert2skk/doc2skk.sh:
+	* convert2skk/README:
+
+	[skk 5806] New files.
+
+	* filters/skkdictools.rb: borrowed 'Goo' class from skkform.rb
+
+2005-08-22  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+
+	* convert2skk/prime2skk.rb: aesthetic changes.
+	* filters/conjugation.rb: aesthetic changes.
+	* READMEs/README.filters: symlink.
+
+2005-06-20  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+
+	* skkdic-expr2.c: -d option changes the annotation delimiter.
+	* filters/skkdictools.rb: discards candidates after '/['.
+	* filters/annotation-filter.rb: -B option to handle comments as annotation.
+	* filters/asayaKe.rb: aesthetic changes.
+	* filters/complete-numerative.rb: -o wasn't implemented!
+	* filters/conjugation.rb: better handling of okuri-ari affixes.
+	* filters/README: documentation updated.
+	* convert2skk/ipadic2skk.rb: should yield better result than before.
+	* convert2skk/prime2skk.rb: should yield better result than before.
+
+2005-06-06  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+
+	* filters/annotation-filter.rb:
+	* filters/asayaKe.rb:
+	* filters/complete-numerative.rb:
+	* filters/conjugation.rb:
+	* filters/skkdictools.rb:
+	* filters/README:
+	* convert2skk/ipadic2skk.rb:
+	* convert2skk/prime2skk.rb:
+
+	New files.
+
+2005-04-24  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+
+	* skkdic-expr2.c: Reads from stdin if no filename is given.
+
+	* filters/abbrev-convert.rb:
+	* filters/abbrev-simplify-keys.rb:
+
+	New files.
+
+2005-04-24  Mikio NAKAJIMA  <minakaji@osaka.email.ne.jp>
+
+	* Makefile.in (install): Add DESTDIR as a prefix of bindir to
+	make distribution packages easily.
+	* Makefile.in (uninstall): Ditto
+
+2005-03-26  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+	* skkdic-count.c: BUFSIZE was too small.
+
+2005-01-23  MITA Yuusuke  <clefs@mail.goo.ne.jp>
+	* skkdic-count.c: Didn't count pairs after '['. fixed.
+
+2004-08-24  Kimura Fuyuki  <fuyuki@hadaly.org>
+
+	* skkdic-diff.scm: More undertandable diffs.
+	* READMEs/README.skkdic-diff: Update.
+
+2004-06-25  Kimura Fuyuki  <fuyuki@hadaly.org>
+
+	* skkdic-diff.scm: New file.
+	* READMEs/README.skkdic-diff: New file.
+
+2003-09-30  Kentaro Fukuchi <fukuchi@users.sourceforge.net>
+	* skkdic-expr2.c: Now a completely same annotation is ignored during merge
+	  operation. This feature is noted in README.skkdic-expr2 but has not been
+	  implemented. Sorry.
+
+2003-08-17  NAKAJIMA Mikio  <minakaji@namazu.org>
+
+	* skk.ex: Add stamp-h1 and libtool.
+
+	* Version 1.1 released.
+
+2002-03-28  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* configure.ac: Missing $(EXEEXT) for skkdic-expr2.
+	When -lgdbm_compat is available, pass -lgdbm after -lgdbm_compat
+	(workaround for cygwin?).
+
+2002-03-27  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* configure.ac:
+	* configure.in:
+
+	Check for dbm_open() in -lgdbm_compat if the test fails in -lgdbm.
+
+	* config.guess:
+	* config.sub:
+	* missing:
+
+	New files.
+
+2003-03-26  NAKAJIMA Mikio  <minakaji@namazu.org>
+
+	* saihenkan.rb: New file.
+
+2003-03-23  NAKAJIMA Mikio  <minakaji@namazu.org>
+
+	* convert2skk/canna2skk.rb: New file.
+
+2003-03-22  NAKAJIMA Mikio  <minakaji@namazu.org>
+
+	* convert2skk/dic-it2skk.rb: New file.
+
+2002-09-20  Kentaro Fukuchi <fukuchi@users.sourceforge.net>
+	* skkdic-expr2.c: Removed unused variables.
+
+2002-09-20  IIDA Yosiaki  <iida@ring.gr.jp>
+
+	* Makefile.am, VERSION, compile, configure.ac, depcomp, ltmain.sh:
+	New files for GNU Automake and Libtool.
+
+2002-09-14  Kentaro Fukuchi <fukuchi@users.sourceforge.net>
+	* skkdic-expr2.c: A stupid bug fixed. Please forget previous version...
+
+2002-09-14  IIDA Yosiaki  <iida@ring.gr.jp>
+
+	* Makefile.in: Add copyright year.  Fix maintainer,
+	postal address of FSF.
+	Prepend $(srcdir) to C source files for compilation in separate
+	directory.
+	(DEFS): Prepend -I. for the same reason.
+	(skkdic-expr2$(EXEEXT)): Always activate target to avoid syntax
+	error.
+
+2002-09-13  IIDA Yosiaki  <iida@ring.gr.jp>
+
+	* acinclude.m4: Renamed from aclocal.m4.
+	* aclocal.m4: Removed, because automagically generated by aclocal.
+
+2002-09-13  Kentaro Fukuchi <fukuchi@users.sourceforge.net>
+	* skkdic-expr2.c: New SKK dictionary maintenance tool.
+	* aclocal.m4: New file used by autoconf. pkg-config.m4 is included.
+	* configure.in, Makefile.in, .cvsignore: Added some configurations and
+	rules for skkdic-expr2.
+	* configure: Re-generated by autoconf.
+
+2002-08-18  NAKAJIMA Mikio  <minakaji@osaka.email.ne.jp>
+
+	* skk-xml.el: New file.
+	(skk-xml-make-jisyo-reference-1): Bug fixed.
+
+2002-08-05  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* skkdic-count.c:
+
+	(count_entry): Print "%s: %d candidates\n" instead of
+	"%s %d candidates\n".
+
+2002-08-02  NAKAJIMA Mikio  <minakaji@osaka.email.ne.jp>
+
+	* unannotation.awk: Not to delete first line.
+	* convert2skk/ctdicconv.rb: New file.
+
+2002-06-03  NAKAJIMA Mikio  <minakaji@osaka.email.ne.jp>
+
+	* unannotation.awk: New file (Move from skk/dic).
+
+2002-02-23  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* COPYING: Update.
+
+2001-04-30  NAKAJIMA Mikio  <minakaji@osaka.email.ne.jp>
+
+	* convert2skk/wnn2skk.sed: Remove unnecessary regexp processing.
+
+	* convert2skk/wnn2skk.awk: Do not put out skk dictionary header
+	(Use skkdic-expr and skkdic-sort for post-processing.).
+	Pick up hinshi and comment data for SKK annotation.
+
+2000-12-15  NAKAJIMA Mikio  <minakaji@osaka.email.ne.jp>
+
+	* skkdic-expr.c (type_out): Apply patch of Message-Id:
+	<20001214.015641.28085711.ori@kuee.kyoto-u.ac.jp> from ORI Manabu
+	<ori@kuee.kyoto-u.ac.jp>.
+
+2000-10-17  Toru YANO  <toru@maid.ne.jp>
+
+        * tools: Version 1.0 released.
+
+2000-10-13  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* configure: Remake by autoconf.
+
+	* configure.in: search /usr/local/bin path for tar command before
+	$PATH.
+
+2000-10-12  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* .cvsignore: Add configure.scan.
+	* configure.scan: Removed.
+
+2000-10-10  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* READMES/README.C: Update.
+
+	* skkdic-count.c (count_entry): Don't count blocks.
+
+2000-10-05  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* skkdic-count.c (count_entry): Show "candidates", not "entries".
+
+2000-10-04  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* configure.in: Turn on m4-mode.
+
+2000-10-03  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* convert2skk/edict2skk.awk: Do not filter "放送禁止用語".
+
+2000-09-30  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* READMEs/FAQ.txt: Document fixed.
+
+	* convert2skk/wnn2skk.awk: Remove unnecessary tag in tankan3.u.
+	* convert2skk/wnn2skk.sed: Ditto.
+
+2000-09-29  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* READMEs/FAQ.txt: New file.
+
+2000-09-27  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* configure.in: Check for md5sum only when md5 doesn't exist.
+
+2000-09-23  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* configure.in: Check if programs bzip2, date, gzip, md5 (or
+	md5sum) and tar exist or not.
+
+	* Makefile.in (tar): New target.
+	(snapshot): Ditto.
+	(.PHONY): Ditto.
+	(BZIP2): New variable
+	(DATE): Ditto.
+	(GZIP): Ditto.
+	(MD5): Ditto.
+	(TAR): Ditto.
+	(SNAPBASE): Ditto.
+
+	* skk.ex: New file.
+
+	* convert2skk/wnn2skk.sh: New file.
+	* convert2skk/wnn2skk.awk: Ditto.
+	* convert2skk/wnn2skk.sed: Ditto.
+
+2000-09-09  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* configure: Regenetare.
+
+	* configure.in: Check ndbm.h when "$ac_cv_func_dbm_open" is yes.
+
+	* skkdic-expr.c: Modify according to it.
+
+2000-07-28  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Makefile.in (uninstall): New target.
+
+	* configure: Regenerate by autoconf.
+
+	* configure.in: Refer to "$ac_cv_func_dbm_open".
+
+2000-07-27  Tetsuo Tsukamoto  <czkmt@remus.dti.ne.jp>
+
+	* Makefile.in: Check for $(top_srcdir).
+
+	* config.h.in: Regenerate by autoheader (autoconf 2.14.1).
+
+	* configure: Regenerate by autoconf 2.14.1.
+
+	* configure.in: Enable to check for dbm_open() in -lgdbm.
+	Check for ndbm.h and db1/ndbm.h.
+
+	* skkdic-expr.c: When ndbm.h is not found, include db1/ndbm.h if
+	possible. Add declaration for gdbm.
+
+2000-07-26  Tetsuo Tsukamoto <czkmt@remus.dti.ne.jp>
+
+	* configure: Regenerate by autoconf 2.14.1.
+
+	* configure.in: Fix the last commitment.
+
+2000-07-25  Tetsuo Tsukamoto <czkmt@remus.dti.ne.jp>
+
+	* Makefile.in: Check for $(EXEEXT).
+	(install-strip): New target.
+
+	* config.h.in: Regenerate by autoheader (autoconf 2.14.1).
+
+	* configure: Regenerate by autoconf 2.14.1.
+
+	* configure.in: Check for __db_ndbm_open() in -ldb if -lndbm is
+	not available. Check for executable suffix.
+
+	* skkdic-expr.c: If HAVE_LIBDB is defined, include <db.h>.
+
+2000-03-13  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* convert2skk/edict2skk.awk: Comment fixed.
+
+	* skkdic-count.c: Change file name description of
+	`skkjisyo-count.c' to skkdic-count.c.
+
+	* skkdic-sort.c: Change file name description of `skkjisyo-sort.c'
+	to skkdic-sort.c.
+
+	* skkdic-expr.c: Change file name description of `skkjisyo-expr.c'
+	to skkdic-expr.c.
+	(main): Change working file name `skkjisyo.%d' to `skkdic%d',
+	`skkhead.%d' to `skkhead%d' and `skktail.%d' to `skktail%d'.
+
+2000-03-12  Mikio Nakajima  <minakaji@osaka.email.ne.jp>
+
+	* Makefile.in (distclean): Remove config.h.
+
+	* skkdic-count.c: Include config.h.
+	* skkdic-sort.c: Ditto.
+
+	* skkdic-expr.c: Include config.h.
+	(set_signal_handler): Use RETSIGTYPE for the return type of signal
+	handlers.
+	(signal_handler): Ditto.
+
+1999-08-21  Naoki Wakamatsu <naoki-w@ht-net21.ne.jp>
+
+	* skkdic-expr.c (db_remove_files, db_make_files, main): Bug fixed
+	as to `-d' option.
+
+1998-12-07  Fumitoshi UKAI <ukai@debian.or.jp>
+
+	* skkdic-expr.c: Include db1/ndbm.h for GNU libc 2.1.

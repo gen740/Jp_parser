@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /ringserver/
+Disallow: /k16/htmllint/

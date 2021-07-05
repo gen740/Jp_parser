@@ -1,0 +1,12 @@
+# crontab in openlab.ring.gr.jp
+# Version: $Id: crontab,v 1.12 2004/10/30 11:10:29 skk-cvs Exp $
+# Last Modified: $Date: 2004/10/30 11:10:29 $
+#MAILTO=""
+CVSROOT=/circus/cvsroot
+RUBYLIB=/usr/home/minakaji/ruby:$RUBYLIB
+1 9 * * 0 (date ; echo "making main distribution archive..."; $HOME/bin/ddmake.sh) >> $HOME/log/cron.log 2>&1
+5 9 * * 6 (date ; echo "adding new entries to large dictionary cvs repositry..." ; $HOME/bin/commit_and_mail.rb) >> $HOME/log/cron.log 2>&1
+15 9,18 * * * (date ; echo "making dictionary distribution archive..." ; tar cvzpf $HOME/backup/log/log`date +'\%y\%m\%d\%H\%M'`.tar.gz /circus/openlab/skk/log && $HOME/bin/dicmake.sh && $HOME/bin/log_maint.rb) >> $HOME/log/cron.log 2>&1
+0 0,12 * * * (date; echo "making a backup file of cgi log..." ; cp -p /circus/openlab/skk/log/registdic.log $HOME/backup/log/registdic`date +'\%y\%m\%d\%H\%M'`.log.BAK) >> $HOME/log/cron.log 2>&1
+45 0-23 * * * (date; echo "searching important comments..."; $HOME/bin/regreqratio.rb) >> $HOME/log/cron.log 2>&1
+# end of crontab

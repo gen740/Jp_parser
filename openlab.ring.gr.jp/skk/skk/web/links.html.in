@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>SKK Openlab - Links</title>
+  <link href="common.css" rel="stylesheet" type="text/css">
+  <link href="index.html" rel="index">
+  <link rev="MADE" href="mailto:skk@ring.gr.jp">
+</head>
+<body>
+<div id="globalnav">
+  <ul>
+    <li><a href="index.html">Top</a>
+    <li><a href="dic.html">SKK dictionaries</a> (<a href="dic" title="DownloadDic">Download</a>)
+    <li><a href="ddskk.html">DDSKK</a> (<a href="maintrunk" title="DownloadSKK">Download</a>)
+    <li><a href="doc.html">Documents</a>
+    <li><a href="ml.html">Mailing list</a>
+    <li><a href="dev.html">Development</a>
+    <li><a href="links.html">Links</a>
+  </ul>
+</div>
+<h1>Links</h1>
+
+<p>Below are links to some English pages concerning SKK, input methods or Lisp.  For information about resources written in Japanese, please refer to <a href="wiki/wiki.cgi?page=%A5%EA%A5%F3%A5%AF%BD%B8">the link page</a> in SKK dictionary Wiki.</p>
+
+<dl>
+
+<dt><a href="http://www.kanji.zinbun.kyoto-u.ac.jp/~tomo/elisp/APEL/index.en.html">APEL (A Portable Emacs Library)</a>
+  <dd>SKK 10.47.2.1 adopted APEL for compatibility among Mule 2.3 (based on Emacs 19.28 or 19.34), Emacs 20 (with Mule), XEmacs 20 (with Mule) and XEmacs 21 (with Mule).  APEL has taken over many features which were originally provided by SKK to absorb differences of Emacsen.
+
+<dt><a href="http://www.mpi-inf.mpg.de/~hitoshi/hobby/japanese/index.shtml">Japanese who learns Japanese</a>
+  <dd>This site gives informations about tools for Japanese learners, including SKK.
+
+<dt><a href="http://en.wikipedia.org/wiki/Japanese_input_methods">Japanese input methods</a>
+  <dd>A Wikipedia article which describes hardware (keyboards) and software needed for Japanese input.
+
+<dt><a href="http://en.wikipedia.org/wiki/Input_method">Input method</a>
+  <dd>A Wikipedia article which explains the terms input method and input method editor (IME).
+
+<dt><a href="http://www-formal.stanford.edu/jmc/recursive/recursive.html">Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I</a> by <a href="http://www-formal.stanford.edu/jmc/">Prof. John McCarthy</a>
+  <dd>This article is strongly recommended by <a href="http://www.sato.kuis.kyoto-u.ac.jp/~masahiko/masahiko-j.html">Prof. Masahiko SATO</a>, the original author of SKK.
+
+</dl>
+
+<div id="mailto">mailto: <a href="mailto:skk@ring.gr.jp">skk@ring.gr.jp</a></div>
+<div id="modtime">Last Modified: $Date: 2015/01/04 03:11:23 $</div>
+</body>
+</html>

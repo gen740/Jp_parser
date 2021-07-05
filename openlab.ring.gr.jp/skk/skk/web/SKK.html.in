@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <title>SKK Openlab - SKK = I</title>
+  <link href="common.css" rel="stylesheet" type="text/css">
+  <link href="index-j.html" rel="index">
+  <link rev="MADE" href="mailto:skk@ring.gr.jp">
+</head>
+<body>
+<div id="globalnav">
+  <ul>
+    <li><a href="index-j.html" name="top">トップ</a>
+    <li><a href="dic-ja.html">SKK 辞書</a> (<a href="dic" title="DownloadDic">ダウンロード</a>, <a href="wiki/wiki.cgi?page=FrontPage">Wiki</a>)
+    <li><a href="ddskk-ja.html">DDSKK</a> (<a href="maintrunk" title="DownloadSKK">ダウンロード</a>)
+    <li><a href="doc-ja.html">ドキュメント</a>
+    <li><a href="ml-ja.html">メーリングリスト</a>
+    <li><a href="dev-ja.html">開発</a>
+    <li><a href="wiki/wiki.cgi?page=%A5%EA%A5%F3%A5%AF%BD%B8">リンク</a>
+  </ul>
+</div>
+<h1>SKK = I</h1>
+<blockquote>
+<p>SKK の名前を考えたときに Combinatory Logic での有名な等式 <em>SKK = I</em> が念頭にあったのは事実です．ずい分昔に <a href="http://www.cs.kun.nl/~henk/">Henk Barendregt</a> さんにこの話をしたこともありました．Combinatory Logic は一般にはあまり知られていないので簡単に紹介をしてみます．</p>
+
+<p>Combinatory Logic は，λ計算と同様，すべての項 (term, 計算機の言葉で言えば，プログラムに相当するもの)が関数であるような体系である．Logic という名前がついているのは，その上に論理を展開することを目的としていたからであるが，論理の体系としては成功しなかった．しかし，λ計算と密接な関係があることから，計算の体系としては重要なものである．</p>
+
+<p>Combinatory Logic の項 (combinator) は以下の文法規則で定義される．</p>
+
+<pre>
+    項 ::= 変数 | 定数 | 項(項)
+</pre>
+
+<p>すなわち，項は，変数であるか，定数であるか，(関数としての)項 f に(引数としての)項 a を適用した項 f(a) のいずれかである． 通常よく用いられる定数には S, K, I がある．したがって，たとえば，I, S, S(K), S(K)(K) はすべて上の定義により項になる．</p>
+
+<p>なお，通常，Combinatory Logic では f の a への適用 f(a) のことを適用の演算子 * を用いて f*a のように書いて，* は左に結合すると約束する．したがって，f*x*y と書けば，これは (f*x)*y のことであり，f*(x*y)のことではない．その上で，さらに，通常は，* も省略することを許しているので，今の例は fxy となる．しかし，ここでは，そのような省略はしない．fxy とは書かないで，f(x)(y) と書くことにする．ふつう，Combinatory Logic で SKK と書かれる項は，S(K)(K) のことである．</p>
+
+<p>Combinatory Logic の項は引数をひとつだけとるので，apply を用いて app を定義しておく．これにより，項 f(x) を Emacs Lisp で (app f x) と書くことができるようになる．</p>
+
+<pre>
+    (defun app (f x) (apply f (list x)))
+</pre>
+
+<p>Combinatory Logic の<em>定数 S は等式 S(f)(g)(x) = f(x)(g(x)) を満足する combinator </em>として定義される．</p>
+
+<pre>
+    i.e., (app (app (app S f) g) x) = (app (app f x) (app g x))
+</pre>
+
+<p>λ計算では S を以下のように定義できる (λ計算の解説は省略するが，第 0 近似としては Lisp だと思ってよい:-) もちろん，歴史的にはλ計算が Lisp に影響を与えているのであるが．．．)．</p>
+
+<pre>
+    S = λ(f)[λ(g)[λ(x)[f(x)(g(x))]]]
+</pre>
+
+<p>この S を Emacs Lisp で定義すると次のようになる．</p>
+
+<pre>
+    (defconst S
+      (lambda (f) `(lambda (g) (let ((f ,f))
+                                 `(lambda (x) (app (app ,f x) (app ,g x)))))))
+</pre>
+
+<p>3 つ目の引数 x がコピーされてふたつになることが S のポイントである．</p>
+
+<p><em>K combinator は等式 K(x)(y) = x を満足する定数</em>として定義される．</p>
+
+<pre>
+    i.e., (app (app K x) y) = x
+</pre>
+
+<p>λ計算では K を以下のように定義できる．</p>
+
+<pre>
+    K = λ(x)[λ(y)[x]]
+</pre>
+
+<p>この K を Emacs Lisp で定義すると次のようになる．</p>
+
+<pre>
+    (defconst K (lambda (x) `(lambda (y) ,x)))
+</pre>
+
+<p>2 つ目の引数をすてることが K のポイントである．</p>
+
+<p><em>I combinator は恒等関数を表し，等式 I(x) = x を満足する</em>．</p>
+
+<pre>
+    i.e., (app I x) = x
+</pre>
+
+<p>λ計算では I を以下のように定義できる．</p>
+
+<pre>
+    I = λ(x)[x]
+</pre>
+
+<p>I を Emacs Lisp で定義すると次のようになる．</p>
+
+<pre>
+    (defconst I (lambda (x) x))
+</pre>
+
+<p>Combinatory Logic で <em>S(K)(K) = I という等式が成り立つ</em>ということの意味は，任意の combinator x に対して，S(K)(K)(x) を計算してみると</p>
+
+<pre>
+    S(K)(K)(x) = K(x)(K(x)) = x
+</pre>
+
+<p>となり，I についても I(x) = x なので，どちらも，任意の入力 x について何も変更を加えないで x をそのまま出力する関数と考えられということである．日本語入力システム SKK という名前には，<em>ユーザの頭の中にある日本語のテキストを，なるべくストレスなしに，そのままディスプレイに出力するプログラムにしたいという気持ちが込められている</em>．</p>
+
+<p>Emacs Lisp でも S(K)(K) を以下のように定義することにより，恒等関数をつくることができる．</p>
+
+<pre>
+    (defconst SKK (app (app S K) K))
+</pre>
+
+<p>examples</p>
+
+<pre>
+    (app SKK 2) ;; -&gt; 2
+    (app I 2) ;; -&gt; 2
+    (app SKK "SKK") ;; -&gt; "SKK"
+    (app I "SKK") ;; -&gt; "SKK"
+    (equal SKK (app SKK SKK)) ;; -&gt; t
+    (equal I (app I I)) ;; -&gt; t
+    (equal SKK I) ;; -&gt; nil となるのは，SKK と I はプログラムとしては同じふるまい
+                  ;;    をするが，コードとしては異るからである．
+
+    (defun SKK (x) (app SKK x))
+    (SKK 2) ;; -&gt; 2
+    (SKK "SKK") ;; -&gt; "SKK"
+</pre>
+
+<p>Combinatory Logic のすごいところは， S と K だけで計算可能な関数をすべて記述できるということです．あまりにすごいのでプログラミング言語として使う人はいないようです．これに対して，λ計算は，同じようにすごい言語ですが，Lisp や型付の関数型言語として姿を変て現在もよく使われています．その理由は自然演繹とよばれる論理の体系との関係が深いからだと私は考えています．</p>
+
+<p>===================================================================================<br>
+この小文の草稿について有益な質問，コメントを寄せてくださった中島幹夫氏に感謝します．<br>
+===================================================================================</p>
+</blockquote>
+
+<p>Copyright (C) 2002 <a href="http://www.sato.kuis.kyoto-u.ac.jp/~masahiko/masahiko-j.html">佐藤雅彦</a> (京都大学名誉教授)</p>
+
+<div id="mailto">mailto: <a href="mailto:skk@ring.gr.jp">skk@ring.gr.jp</a></div>
+<div id="modtime">Last Modified: $Date: 2015/01/04 03:11:23 $</div>
+</body>
+</html>
