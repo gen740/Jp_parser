@@ -113,8 +113,9 @@ class Node(object):
                 data
             )
             prev.update({key: [total_cost, child]})
-            print(prev)
-            print('---------')
+            for i in prev.keys():
+                print(f'コスト{prev[i][0]} \t --- {i}')
+            print('---------------------------------------')
             child.parse_children()
             self.children.append(child)
 
@@ -132,30 +133,22 @@ class Parser(object):
                 min = prev[i]
             elif i.endswith(':') and prev[i][0] < min[0]:
                 min = prev[i]
-        print(min[1].data)
         result = [min[1].data]
         parent = min[1]
         while parent.parent is not None:
             result.append(parent.parent.data)
-            print(parent.parent.data)
             parent = parent.parent
-        print(prev)
         return result
 
 
 def main():  # メインテスト
     p = Parser('これは日本語の形態素解析用のプログラムです')
-    print(p.analyze())
-    # p = Parser('これは日本語の形態素')
-    # print(p.analyze())
+    result = p.analyze()
+    for i in range(len(result)):
+        print(result[len(result) - i - 1])
 
 
 if __name__ == "__main__":
     main()
     pass
 
-'''
-参考文献
-https://taku910.github.io/mecab/
-https://techlife.cookpad.com/entry/2016/05/11/170000
-'''
